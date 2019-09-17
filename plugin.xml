@@ -6,15 +6,6 @@
     <js-module name="BatteryStatus" src="www/BatteryStatus.js">
         <clobbers target="BatteryStatus" />
     </js-module>
-    <platform name="android">
-        <config-file parent="/*" target="res/xml/config.xml">
-            <feature name="BatteryStatus">
-                <param name="android-package" value="cordova.plugin.kaaryaa.batterystatus.BatteryStatus" />
-            </feature>
-        </config-file>
-        <config-file parent="/*" target="AndroidManifest.xml" />
-        <source-file src="src/android/BatteryStatus.java" target-dir="src/cordova/plugin/kaaryaa/batterystatus/BatteryStatus" />
-    </platform>
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
             <feature name="BatteryStatus">
