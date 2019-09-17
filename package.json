@@ -1,0 +1,23 @@
+{
+  "name": "batterystatus",
+  "version": "1.0.0",
+  "description": "battery status for ios and android ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "battery",
+    "battery",
+    "level",
+    "ionic",
+    "battery",
+    "status",
+    "level",
+    "status",
+    "ionic",
+    "4"
+  ],
+  "author": "ankit chaudhary @ Kaaryaa Labs",
+  "license": "ISC"
+}
