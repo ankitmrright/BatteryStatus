@@ -1,4 +1,4 @@
-package cordova-plugin-kaaryaa-batterystatus;
+package cordova.plugin.kaaryaa.batterystatus;
 
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CallbackContext;
