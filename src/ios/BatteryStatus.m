@@ -6,27 +6,14 @@
     // Member variables go here.
 }
 
-- (void)coolMethod:(CDVInvokedUrlCommand*)command;
-- (void)getStatus:(CDVInvokedUrlCommand*)command;
+- (void)isPlugged:(CDVInvokedUrlCommand*)command;
+- (void)getLevel:(CDVInvokedUrlCommand*)command;
 @end
 
 @implementation BatteryStatus
 
 @synthesize state, level, callbackId, isPlugged;
 
-- (void)coolMethod:(CDVInvokedUrlCommand*)command
-{
-    CDVPluginResult* pluginResult = nil;
-    NSString* echo = [command.arguments objectAtIndex:0];
-    
-    if (echo != nil && [echo length] > 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-    } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-    }
-    
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-}
 - (void)isPlugged:(CDVInvokedUrlCommand*)command
 {
     @try {

@@ -26,10 +26,10 @@ public class BatteryStatus extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (action.equals("getLevel")) {
-            this.getStatus(args, callbackContext);
+            getStatus(args, callbackContext);
             return true;
         } else if (action.equals("isPLugged")) {
-            this.getStatus(args, callbackContext);
+            getStatus(args, callbackContext);
             return true;
         }
         return false;
