@@ -25,44 +25,38 @@ public class BatteryStatus extends CordovaPlugin {
      }
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("getStatus")) {
+        if (action.equals("getLevel")) {
+            this.getStatus(args, callbackContext);
+            return true;
+        } else if (action.equals("isPLugged")) {
             this.getStatus(args, callbackContext);
             return true;
         }
         return false;
     }
-
-    private void coolMethod(String message, CallbackContext callbackContext) {
-        if (message != null && message.length() > 0) {
-            callbackContext.success(message);
-        } else {
-            callbackContext.error("Expected one non-empty string argument.");
+    
+    private void getLevel(JSONArray args, CallbackContext callbackContext) {
+        try {
+            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+            float batteryPct = level / (float)scale;
+            callbackContext.success("" + batteryPct);
+        } catch (Exception e) {
+            callbackContext.error("something went wrong" + e);
         }
     }
-    private void getStatus(JSONArray args, CallbackContext callbackContext) {
-      try {
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = context.registerReceiver(null, ifilter);
-        // Are we charging / charged?
-        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-                            status == BatteryManager.BATTERY_STATUS_FULL;
-
-        // How are we charging?
-        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-        boolean usbCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_USB;
-        boolean acCharge = chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
-
-
-        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-        float batteryPct = level / (float)scale;
-
-        BatteryStatusInformation batteryInfo = new BatteryStatusInformation();
-        batteryInfo.setParams(isCharging, level, batteryPct, usbCharge, acCharge);
-        callbackContext.success(batteryInfo);
-      } catch (Exception e) {
-          callbackContext.error("something went wrong" + e);
-      }
+    private void isPLugged(JSONArray args, CallbackContext callbackContext) {
+        try {
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = context.registerReceiver(null, ifilter);
+            // Are we charging / charged?
+            int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                                status == BatteryManager.BATTERY_STATUS_FULL;
+            callbackContext.success("" + isCharging);
+                                
+        } catch (Exception e) {
+            callbackContext.error("something went wrong" + e);
+        }
     }
 }

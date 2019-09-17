@@ -27,7 +27,7 @@
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
-- (void)getStatus:(CDVInvokedUrlCommand*)command
+- (void)isPlugged:(CDVInvokedUrlCommand*)command
 {
     @try {
         UIDevice *myDevice = [UIDevice currentDevice]; UIDevice* currentDevice = [UIDevice currentDevice];
@@ -37,6 +37,22 @@
         if ((currentState == UIDeviceBatteryStateCharging) || (currentState == UIDeviceBatteryStateFull)) {
             isPlugged = TRUE;
         }
+        
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@(isPlugged)];
+        [result setKeepCallbackAsBool:YES];
+        [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
+        
+    } @catch (NSException *exception) {
+        CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR mes: exception.reason];
+    }
+}
+
+- (void)getLevel:(CDVInvokedUrlCommand*)command
+{
+    @try {
+        UIDevice *myDevice = [UIDevice currentDevice]; UIDevice* currentDevice = [UIDevice currentDevice];
+        UIDeviceBatteryState currentState = [currentDevice batteryState];
+        
         float currentLevel = [currentDevice batteryLevel];
         
         if ((currentLevel != self.level) || (currentState != self.state)) {
@@ -51,11 +67,9 @@
         } else {
             w3cLevel = [NSNumber numberWithFloat:(currentLevel * 100)];
         }
-        NSMutableDictionary* batteryData = [NSMutableDictionary dictionaryWithCapacity:2];
-        [batteryData setObject:[NSNumber numberWithBool:isPlugged] forKey:@"isPlugged"];
-        [batteryData setObject:w3cLevel forKey:@"level"];
         
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:batteryData];
+        
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@(w3cLevel)];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
         
