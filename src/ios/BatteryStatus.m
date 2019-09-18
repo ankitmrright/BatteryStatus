@@ -25,22 +25,25 @@
 - (void)isPlugged:(CDVInvokedUrlCommand*)command
 {
     @try {
-        UIDevice* currentDevice = [UIDevice currentDevice];
-        UIDeviceBatteryState currentState = [currentDevice batteryState];
-        
-        isPlugged = FALSE; // UIDeviceBatteryStateUnknown or UIDeviceBatteryStateUnplugged
-        if ((currentState == UIDeviceBatteryStateCharging) || (currentState == UIDeviceBatteryStateFull)) {
-            isPlugged = TRUE;
+        UIDevice *myDevice = [UIDevice currentDevice];
+        [myDevice setBatteryMonitoringEnabled:YES];
+
+        int state = [myDevice batteryState];
+        // 0 unknown, 1 unplegged, 2 charging, 3 full
+
+     
+        NSString * pluggedResult = @"";
+        if (state == 0) {
+            pluggedResult = @"unknown";
+        } else if (state == 1) {
+            pluggedResult = @"unplugged";
+        } else if (state == 2) {
+            pluggedResult = @"charging";
+        } else if {
+            pluggedResult = @"full";
         }
-        NSString * plugged = @"";
-        if (isPlugged) {
-            plugged = @"true";
-        } else {
-            plugged = @"false";
-        }
         
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:plugged];
-        [result setKeepCallbackAsBool:YES];
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:pluggedResult];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         
     } @catch (NSException *exception) {
@@ -52,28 +55,12 @@
 - (void)getLevel:(CDVInvokedUrlCommand*)command
 {
     @try {
-        UIDevice* currentDevice = [UIDevice currentDevice];
-        UIDeviceBatteryState currentState = [currentDevice batteryState];
+        UIDevice *myDevice = [UIDevice currentDevice];
+        [myDevice setBatteryMonitoringEnabled:YES];
         
-        float currentLevel = [currentDevice batteryLevel];
+        double batLeft = (float)[myDevice batteryLevel] * 100;
         
-        if ((currentLevel != self.level) || (currentState != self.state)) {
-            self.level = currentLevel;
-            self.state = currentState;
-        }
-        
-        CDVPluginResult* result = nil;
-        // W3C spec says level must be null if it is unknown
-        NSObject* w3cLevel = nil;
-        if ((currentState == UIDeviceBatteryStateUnknown) || (currentLevel == -1.0)) {
-            w3cLevel = [NSNull null];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"null"];
-        } else {
-            w3cLevel = [NSNumber numberWithFloat:(currentLevel * 100)];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%@", [NSNumber numberWithFloat:(currentLevel * 100)]]];
-        }
-        
-        [result setKeepCallbackAsBool:YES];
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%ld", batLeft]];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         
     } @catch (NSException *exception) {
