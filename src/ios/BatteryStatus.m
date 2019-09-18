@@ -25,18 +25,18 @@
 - (void)isPlugged:(CDVInvokedUrlCommand*)command
 {
     @try {
-        UIDevice *myDevice = [UIDevice currentDevice]; UIDevice* currentDevice = [UIDevice currentDevice];
+        UIDevice* currentDevice = [UIDevice currentDevice];
         UIDeviceBatteryState currentState = [currentDevice batteryState];
         
         isPlugged = FALSE; // UIDeviceBatteryStateUnknown or UIDeviceBatteryStateUnplugged
         if ((currentState == UIDeviceBatteryStateCharging) || (currentState == UIDeviceBatteryStateFull)) {
             isPlugged = TRUE;
         }
-        NSString * plugged = '';
+        NSString * plugged = @"";
         if (isPlugged) {
-            plugged = 'true';
+            plugged = @"true";
         } else {
-            plugged = 'false';
+            plugged = @"false";
         }
         
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:plugged];
@@ -45,13 +45,14 @@
         
     } @catch (NSException *exception) {
         CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: exception.reason];
+        [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
     }
 }
 
 - (void)getLevel:(CDVInvokedUrlCommand*)command
 {
     @try {
-        UIDevice *myDevice = [UIDevice currentDevice]; UIDevice* currentDevice = [UIDevice currentDevice];
+        UIDevice* currentDevice = [UIDevice currentDevice];
         UIDeviceBatteryState currentState = [currentDevice batteryState];
         
         float currentLevel = [currentDevice batteryLevel];
@@ -66,10 +67,10 @@
         NSObject* w3cLevel = nil;
         if ((currentState == UIDeviceBatteryStateUnknown) || (currentLevel == -1.0)) {
             w3cLevel = [NSNull null];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:"null"];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"null"];
         } else {
             w3cLevel = [NSNumber numberWithFloat:(currentLevel * 100)];
-            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%d", [NSNumber numberWithFloat:(currentLevel * 100)]]];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%@", [NSNumber numberWithFloat:(currentLevel * 100)]]];
         }
         
         [result setKeepCallbackAsBool:YES];
@@ -77,6 +78,7 @@
         
     } @catch (NSException *exception) {
         CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: exception.reason];
+        [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
     }
 }
 
