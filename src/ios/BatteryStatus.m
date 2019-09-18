@@ -55,21 +55,22 @@
             self.state = currentState;
         }
         
+        CDVPluginResult* result = nil;
         // W3C spec says level must be null if it is unknown
         NSObject* w3cLevel = nil;
         if ((currentState == UIDeviceBatteryStateUnknown) || (currentLevel == -1.0)) {
             w3cLevel = [NSNull null];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:"null"];
         } else {
             w3cLevel = [NSNumber numberWithFloat:(currentLevel * 100)];
+            result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[NSString stringWithFormat:@"%d", [NSNumber numberWithFloat:(currentLevel * 100)]]];
         }
         
-        
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@(w3cLevel)];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
         
     } @catch (NSException *exception) {
-        CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR mes: exception.reason];
+        CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: exception.reason];
     }
 }
 
