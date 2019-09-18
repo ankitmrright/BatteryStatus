@@ -32,13 +32,19 @@
         if ((currentState == UIDeviceBatteryStateCharging) || (currentState == UIDeviceBatteryStateFull)) {
             isPlugged = TRUE;
         }
+        NSString * plugged = '';
+        if (isPlugged) {
+            plugged = 'true';
+        } else {
+            plugged = 'false';
+        }
         
-        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@(isPlugged)];
+        CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:plugged];
         [result setKeepCallbackAsBool:YES];
         [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
         
     } @catch (NSException *exception) {
-        CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR mes: exception.reason];
+        CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: exception.reason];
     }
 }
 
