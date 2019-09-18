@@ -41,11 +41,11 @@
         
         CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:plugged];
         [result setKeepCallbackAsBool:YES];
-        [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         
     } @catch (NSException *exception) {
         CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: exception.reason];
-        [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
 }
 
@@ -74,11 +74,11 @@
         }
         
         [result setKeepCallbackAsBool:YES];
-        [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         
     } @catch (NSException *exception) {
         CDVPluginResult* result =  [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: exception.reason];
-        [self.commandDelegate sendPluginResult:result callbackId:self.callbackId];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }
 }
 
