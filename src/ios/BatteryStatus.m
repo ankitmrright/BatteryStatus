@@ -8,12 +8,11 @@
     float level;
     bool isPlugged;
     NSString* callbackId;
-    
-    @property (nonatomic) UIDeviceBatteryState state;
-    @property (nonatomic) float level;
-    @property (nonatomic) bool isPlugged;
-    @property (strong) NSString* callbackId;
 }
+@property (nonatomic) UIDeviceBatteryState state;
+@property (nonatomic) float level;
+@property (nonatomic) bool isPlugged;
+@property (strong) NSString* callbackId;
 
 - (void)isPlugged:(CDVInvokedUrlCommand*)command;
 - (void)getLevel:(CDVInvokedUrlCommand*)command;
