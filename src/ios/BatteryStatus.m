@@ -39,7 +39,7 @@
             pluggedResult = @"unplugged";
         } else if (state == 2) {
             pluggedResult = @"charging";
-        } else if {
+        } else {
             pluggedResult = @"full";
         }
         
